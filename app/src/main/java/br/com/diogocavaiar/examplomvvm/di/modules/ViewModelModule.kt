@@ -15,7 +15,7 @@ interface ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(MainViewModel::class)
-    fun bindListColorsViewModel(mainViewModel: MainViewModel) : ViewModel
+    fun bindListMainViewModel(mainViewModel: MainViewModel) : ViewModel
 
     @Binds
     fun bindViewModelFactory(viewModelFactory: ViewModelFactory): ViewModelProvider.Factory
