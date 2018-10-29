@@ -11,7 +11,7 @@ import br.com.diogocavaiar.examplomvvm.ui.base.BaseActivity
 
 class MainActivity : BaseActivity<ActivityUserBinding, MainViewModel>() {
 
-    private var binding: ActivityUserBinding? = null
+    private lateinit var binding: ActivityUserBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +33,10 @@ class MainActivity : BaseActivity<ActivityUserBinding, MainViewModel>() {
     }
 
     override fun loadComponents() {
-        binding!!.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding!!.swipeContainer.setOnRefreshListener(getViewModel()::loadData)
+        binding.apply {
+            recyclerView?.layoutManager = LinearLayoutManager(baseContext)
+            swipeContainer.setOnRefreshListener(getViewModel()::loadData)
+        }
     }
 
     override fun getViewModel(): MainViewModel {
@@ -44,8 +46,8 @@ class MainActivity : BaseActivity<ActivityUserBinding, MainViewModel>() {
     private fun observeResponse() {
         getViewModel().loadingStatus.observe(
                 this,
-                Observer {
-                    isLoading -> binding!!.swipeContainer.isRefreshing = isLoading ?: false
+                Observer { isLoading ->
+                    binding.swipeContainer.isRefreshing = isLoading ?: false
                 })
     }
 
@@ -53,12 +55,11 @@ class MainActivity : BaseActivity<ActivityUserBinding, MainViewModel>() {
         getViewModel().response.observe(
                 this,
                 Observer { response ->
-                    if(response != null && response.status == Status.SUCCESS) {
-                        binding!!.item = response.data
-                    } else {
-                        if (response != null && response.status == Status.ERROR) {
-                            showMessage(response.error.toString())
-                        }
+                    response.let {
+                        if (it?.status == Status.SUCCESS)
+                            binding.item = it.data
+                        else if (it?.status == Status.ERROR)
+                            showMessage(it.error.toString())
                     }
                 }
         )
