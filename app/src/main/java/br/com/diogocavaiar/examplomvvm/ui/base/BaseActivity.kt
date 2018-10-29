@@ -7,6 +7,7 @@ import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.design.widget.Snackbar
+import br.com.diogocavaiar.examplomvvm.R
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
@@ -15,8 +16,8 @@ abstract class BaseActivity<T : ViewDataBinding, V : ViewModel> : DaggerAppCompa
     @Inject
     @JvmField var viewModelFactory: ViewModelProvider.Factory? = null
 
-    private var mViewDataBinding: T? = null
-    private var mViewModel: V? = null
+    private lateinit var mViewDataBinding: T
+    private lateinit var mViewModel: V
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,16 +28,15 @@ abstract class BaseActivity<T : ViewDataBinding, V : ViewModel> : DaggerAppCompa
     }
 
     private fun performDataBinding() {
-        mViewDataBinding = DataBindingUtil.setContentView<T>(this, getLayoutId())
+        mViewDataBinding = DataBindingUtil.setContentView(this, getLayoutId())
     }
 
-    fun getViewDataBinding(): T? {
-        if(mViewDataBinding == null) throw RuntimeException("Ocorreu um erro!Data Binding NULL")
+    fun getViewDataBinding(): T {
         return mViewDataBinding
     }
 
     fun showMessage(message: String) {
-        Snackbar.make(mViewDataBinding!!.root, message, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(mViewDataBinding.root, message, Snackbar.LENGTH_LONG).show()
     }
 
     @LayoutRes

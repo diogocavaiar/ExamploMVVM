@@ -24,6 +24,6 @@ class MainViewModel @Inject constructor(
                     result -> response.setValue(Response(Status.SUCCESS, result.items, null))
                 }, {
                     throwable -> response.setValue(Response(Status.ERROR, null, throwable))
-                })
+                }).dispose()
     }
 }

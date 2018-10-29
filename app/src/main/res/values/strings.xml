@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ExamploMVVM</string>
+    <string name="error_databinding">Ocorreu um erro!Data Binding NULL</string>
 </resources>
